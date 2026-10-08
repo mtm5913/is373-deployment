@@ -1,0 +1,114 @@
+name: Test, build, and deploy
+
+on:
+  push:
+    branches: [qa, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/qa' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      IMAGE: ghcr.io/mtm5913/is373-deployment:${{ github.sha }}
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
+      - name: Test website
+        run: python3 -m unittest discover -s tests -v
+
+      - name: Select environment and validate configuration
+        run: |
+          if [ "$GITHUB_REF_NAME" = "qa" ]; then
+            echo "ENVIRONMENT=qa" >> "$GITHUB_ENV"
+            echo "SITE_HOST=qa.megan373lab.xyz" >> "$GITHUB_ENV"
+          else
+            echo "ENVIRONMENT=production" >> "$GITHUB_ENV"
+            echo "SITE_HOST=megan373lab.xyz" >> "$GITHUB_ENV"
+          fi
+          bash -n scripts/deploy.sh
+          ENVIRONMENT=qa SITE_HOST=qa.megan373lab.xyz \
+            docker compose -p is373-qa config --quiet
+
+      - name: Build container image
+        run: |
+          docker build \
+            --label "org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY" \
+            --label "org.opencontainers.image.revision=$GITHUB_SHA" \
+            -t "$IMAGE" .
+
+      - name: Test running container
+        run: |
+          docker run -d --name website-test -p 127.0.0.1:8080:80 "$IMAGE"
+          trap 'docker rm -f website-test' EXIT
+          curl --retry 10 --retry-connrefused --retry-delay 1 \
+            --max-time 30 -fsS http://127.0.0.1:8080/ -o /tmp/page.html
+          cmp index.html /tmp/page.html
+
+      - name: Publish image
+        env:
+          REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          printf '%s' "$REGISTRY_TOKEN" |
+            docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          docker push "$IMAGE"
+
+      - name: Configure verified SSH connection
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deployment_key
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/deployment_key ~/.ssh/known_hosts
+          cat > ~/.ssh/config <<CONFIG
+          Host deployment-server
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/deployment_key
+            IdentitiesOnly yes
+            BatchMode yes
+            StrictHostKeyChecking yes
+          CONFIG
+          chmod 600 ~/.ssh/config
+          ssh deployment-server 'whoami'
+
+      - name: Deploy and verify HTTPS
+        env:
+          REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          REMOTE_DIR="/home/deploy/releases/$ENVIRONMENT/$GITHUB_SHA-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          ssh deployment-server "mkdir -p '$REMOTE_DIR'"
+          tar -czf - compose.yaml index.html scripts/deploy.sh |
+            ssh deployment-server "tar -xzf - -C '$REMOTE_DIR'"
+
+          printf '%s' "$REGISTRY_TOKEN" |
+            ssh deployment-server "
+              set -eu
+              cd '$REMOTE_DIR'
+              export DOCKER_CONFIG=\"\$(mktemp -d)\"
+              trap 'rm -rf \"\$DOCKER_CONFIG\"' EXIT
+              docker login ghcr.io -u '$GITHUB_ACTOR' --password-stdin
+              bash scripts/deploy.sh '$ENVIRONMENT' '$GITHUB_SHA'
+            "
+
+      - name: Record deployment
+        run: |
+          echo "### Successful deployment" >> "$GITHUB_STEP_SUMMARY"
+          echo "Site: https://$SITE_HOST/" >> "$GITHUB_STEP_SUMMARY"
+          echo "Image: $IMAGE" >> "$GITHUB_STEP_SUMMARY"
+          echo "Commit: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
