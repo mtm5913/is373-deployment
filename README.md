@@ -1,3 +1,5 @@
+<img width="696" height="416" alt="Screenshot 2026-10-08 at 2 31 02 PM" src="https://github.com/user-attachments/assets/e549d68f-9d53-4580-a569-1726ae14cbcd" />
+<img width="1440" height="900" alt="Screenshot 2026-10-08 at 2 28 43 PM" src="https://github.com/user-attachments/assets/ccfd3b5f-072f-404d-a3b4-16823c0de73a" />
 # IS 373 Deployment
 
 Production: https://megan373lab.xyz
