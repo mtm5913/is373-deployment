@@ -28,3 +28,7 @@ Effective SSH settings:
 - pubkeyauthentication yes
 - passwordauthentication no
 - kbdinteractiveauthentication no
+<img width="1440" height="900" alt="Screenshot 2026-10-08 at 2 15 52 PM" src="https://github.com/user-attachments/assets/e93d8c2d-dc72-4fc6-8b6f-c5529c8f1e6b" />
+<img width="628" height="744" alt="Screenshot 2026-10-08 at 2 12 48 PM" src="https://github.com/user-attachments/assets/4b3691b2-68bd-4672-a135-b38c7166610c" />
+<img width="628" height="741" alt="Screenshot 2026-10-08 at 2 11 32 PM" src="https://github.com/user-attachments/assets/1eed3021-60a8-47a3-a84f-e3337a1c8693" />
+<img width="625" height="745" alt="Screenshot 2026-10-08 at 2 11 29 PM" src="https://github.com/user-attachments/assets/3afefe45-9a85-42c5-917f-5fb92a18657a" />
