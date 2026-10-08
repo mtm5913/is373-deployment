@@ -21,7 +21,7 @@ class WebsiteTest(unittest.TestCase):
         for tag in ("html", "head", "title", "body", "h1"):
             self.assertIn(tag, page.tags, f"Missing {tag}")
         self.assertTrue(page.release_found, "Missing release paragraph")
-        self.assertIn("Release 1", html)
+        self.assertIn("Release 2", html)
         self.assertIn("</html>", html.lower())
 
 if __name__ == "__main__":
