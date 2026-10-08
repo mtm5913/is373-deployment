@@ -52,7 +52,7 @@ jobs:
         run: |
           docker run -d --name website-test -p 127.0.0.1:8080:80 "$IMAGE"
           trap 'docker rm -f website-test' EXIT
-          curl --retry 10 --retry-connrefused --retry-delay 1 \
+          curl --retry 10 --retry-all-errors --retry-delay 2 \
             --max-time 30 -fsS http://127.0.0.1:8080/ -o /tmp/page.html
           cmp index.html /tmp/page.html
 
