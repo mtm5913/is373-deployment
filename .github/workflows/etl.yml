@@ -1,0 +1,31 @@
+name: Validate ETL
+on:
+  push:
+    paths: ['etl/**', 'tests/**', 'data/raw/**', 'compose.etl.yaml', '.github/workflows/etl.yml']
+  pull_request:
+    paths: ['etl/**', 'tests/**', 'data/raw/**', 'compose.etl.yaml', '.github/workflows/etl.yml']
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - run: python -m unittest discover -s tests -v
+      - run: python -m etl.pipeline --input data/raw/workflow-runs.json
+      - run: NEO4J_PASSWORD=ci-validation-only docker compose -f compose.etl.yaml config --quiet
+      - name: Test graph load and repeat safety in a real Neo4j database
+        env:
+          NEO4J_PASSWORD: ci-validation-only
+        run: |
+          docker compose -p etl-ci -f compose.etl.yaml up -d --wait neo4j
+          mkdir -p data/ci
+          docker compose -p etl-ci -f compose.etl.yaml run --rm --user "$(id -u):$(id -g)" -v "$PWD/data/ci:/data" -v "$PWD/data/raw/workflow-runs.json:/app-fixture.json:ro" etl --input /app-fixture.json --data-dir /data --neo4j-url http://neo4j:7474
+          docker compose -p etl-ci -f compose.etl.yaml run --rm --user "$(id -u):$(id -g)" -v "$PWD/data/ci:/data" -v "$PWD/data/raw/workflow-runs.json:/app-fixture.json:ro" etl --input /app-fixture.json --data-dir /data --neo4j-url http://neo4j:7474
+      - if: always()
+        run: docker compose -p etl-ci -f compose.etl.yaml down
+        env:
+          NEO4J_PASSWORD: ci-validation-only

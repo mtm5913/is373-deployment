@@ -1,0 +1,42 @@
+# Independent of the existing website Compose projects. No public database ports.
+services:
+  neo4j:
+    image: neo4j:5.26-community
+    environment:
+      NEO4J_AUTH: "neo4j/${NEO4J_PASSWORD:?Set NEO4J_PASSWORD}"
+      NEO4J_server_memory_heap_initial__size: 256m
+      NEO4J_server_memory_heap_max__size: 512m
+      NEO4J_server_memory_pagecache_size: 128m
+    volumes:
+      - graph-data:/data
+    networks: [etl]
+    restart: unless-stopped
+    mem_limit: 1g
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:7474 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+  etl:
+    build:
+      context: .
+      dockerfile: etl/Dockerfile
+    environment:
+      NEO4J_PASSWORD: "${NEO4J_PASSWORD:?Set NEO4J_PASSWORD}"
+    volumes:
+      - ./data:/data
+    networks: [etl, extraction]
+    depends_on:
+      neo4j:
+        condition: service_healthy
+    command: ["--data-dir", "/data", "--neo4j-url", "http://neo4j:7474"]
+    user: "${ETL_UID:-10001}:${ETL_GID:-10001}"
+    read_only: true
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+networks:
+  etl:
+    internal: true
+  extraction: {}
+volumes:
+  graph-data: {}

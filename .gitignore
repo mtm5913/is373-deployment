@@ -3,3 +3,12 @@
 *.pem
 *.key
 __pycache__/
+
+# ETL runtime state and secrets
+.env
+data/*.sqlite3
+data/*.sqlite3-*
+data/graph.json
+data/rejections.json
+data/ci/
+__pycache__/

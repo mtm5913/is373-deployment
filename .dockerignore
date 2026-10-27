@@ -6,3 +6,8 @@
 *.key
 README.md
 evidence/
+
+.env
+data
+.git
+__pycache__
