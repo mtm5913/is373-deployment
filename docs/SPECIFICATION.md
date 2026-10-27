@@ -59,7 +59,7 @@ Implemented in the prepared source: ETL, canonical schema, graph loader, repeata
 
 Verified locally: real snapshot imports 9 workflow runs with zero rejects; duplicate import leaves row count unchanged; malformed input is quarantined; older snapshots cannot regress current status; unrelated workflows do not create deployment claims.
 
-Live server and graph deployment evidence is recorded separately in evidence/verification.md. Public GitHub Pages publication and IDE sign-in must be verified before claiming those items complete.
+Verified on the Droplet: two live ETL imports loaded 9 workflow runs, 19 graph nodes, and 26 relationships without duplicates. A failed run has zero deployment edges. Database ports are not published. Detailed evidence is in evidence/verification.md. Public GitHub Pages publication and IDE sign-in must be verified before claiming those items complete.
 
 Acceptance criteria:
 1. Both original website URLs still serve the expected content over HTTPS.
@@ -71,7 +71,7 @@ Acceptance criteria:
 7. A screenshot demonstrates a signed-in Codex conversation in the project in VS Code.
 
 ## Next work
-Confirm the professor's intended dataset and database requirements. Complete privileged SSH evidence, GitHub publication, and interactive IDE sign-in. Add a scheduled refresh only after the manual pipeline is demonstrated. Add backup/restore verification, monitoring, incremental extraction, and richer graph queries as the project grows.
+Confirm the professor's intended dataset and database requirements. Complete privileged SSH evidence, GitHub publication verification, and interactive IDE sign-in. Add a scheduled refresh only after the manual pipeline is demonstrated. Add backup/restore verification, monitoring, incremental extraction, and richer graph queries as the project grows.
 
 ## Demonstration
 Show QA and production; explain their promotion rule. Run ETL on the included snapshot twice and compare counts. Query successful deployments in SQLite and Neo4j, then show a failed workflow with no deployment relationship. Open the specification site and the project in VS Code. See RUNBOOK.md for commands and evidence instructions.

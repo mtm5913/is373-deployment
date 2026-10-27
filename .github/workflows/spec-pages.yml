@@ -2,7 +2,7 @@ name: Publish specification
 on:
   push:
     branches: [main]
-    paths: ['docs/**', '.github/workflows/spec-pages.yml']
+    paths: ['docs/**', 'scripts/build_spec.py', 'scripts/spec-template.html', '.github/workflows/spec-pages.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -21,6 +21,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v6
+      - run: python3 scripts/build_spec.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:

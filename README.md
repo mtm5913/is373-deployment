@@ -35,3 +35,16 @@ Effective SSH settings:
 <img width="625" height="745" alt="Screenshot 2026-10-08 at 2 11 29 PM" src="https://github.com/user-attachments/assets/3afefe45-9a85-42c5-917f-5fb92a18657a" />
 <img width="696" height="416" alt="Screenshot 2026-10-08 at 2 31 02 PM" src="https://github.com/user-attachments/assets/e549d68f-9d53-4580-a569-1726ae14cbcd" />
 <img width="1440" height="900" alt="Screenshot 2026-10-08 at 2 28 43 PM" src="https://github.com/user-attachments/assets/ccfd3b5f-072f-404d-a3b4-16823c0de73a" />
+
+
+## Server specification and ETL extension
+
+Prepared October 27, 2026 from classroom notes; requirements are assumptions pending instructor clarification.
+
+- [High-level specification](docs/SPECIFICATION.md) and [operation/demo runbook](docs/RUNBOOK.md).
+- [Verification record](evidence/verification.md).
+- `etl/pipeline.py` extracts GitHub Actions history, normalizes it into canonical SQLite, and loads a Neo4j graph.
+- `compose.etl.yaml` isolates the data pipeline from existing QA and production websites.
+- `.github/workflows/spec-pages.yml` publishes the specification to GitHub Pages after Pages is enabled and the branch reaches main.
+
+Local demo: `python3 -m etl.pipeline --input data/raw/workflow-runs.json`. See the runbook for deployment and graph queries.
