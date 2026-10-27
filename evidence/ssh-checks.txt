@@ -1,0 +1,5 @@
+October 27, 2026; host address redacted.
+
+SSH-key login as deploy succeeded.
+Root login with the existing key: root@<server>: Permission denied (publickey).
+Password-only attempt with PubkeyAuthentication=no and BatchMode=yes: deploy@<server>: Permission denied (publickey).

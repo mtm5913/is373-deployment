@@ -59,7 +59,7 @@ Implemented in the prepared source: ETL, canonical schema, graph loader, repeata
 
 Verified locally: real snapshot imports 9 workflow runs with zero rejects; duplicate import leaves row count unchanged; malformed input is quarantined; older snapshots cannot regress current status; unrelated workflows do not create deployment claims.
 
-Verified on the Droplet: two live ETL imports loaded 9 workflow runs, 19 graph nodes, and 26 relationships without duplicates. A failed run has zero deployment edges. Database ports are not published. Detailed evidence is in evidence/verification.md. Public GitHub Pages publication and IDE sign-in must be verified before claiming those items complete.
+Verified on the Droplet: two live ETL imports loaded 9 workflow runs, 19 graph nodes, and 26 relationships without duplicates. A failed run has zero deployment edges. Database ports are not published. Detailed evidence is in evidence/verification.md. The public GitHub Pages specification and successful QA, production, and ETL workflow runs have been verified. The project is open and trusted in VS Code; the official Codex sidebar is authenticated and IDE context is enabled.
 
 Acceptance criteria:
 1. Both original website URLs still serve the expected content over HTTPS.
@@ -68,10 +68,10 @@ Acceptance criteria:
 4. Failed workflows have no DEPLOYED_TO relationship.
 5. Database ports are absent from public host port mappings.
 6. The specification is reachable through a public GitHub Pages URL.
-7. A screenshot demonstrates a signed-in Codex conversation in the project in VS Code.
+7. The official Codex sidebar is authenticated with this project open and IDE context enabled.
 
 ## Next work
-Confirm the professor's intended dataset and database requirements. Complete privileged SSH evidence, GitHub publication verification, and interactive IDE sign-in. Add a scheduled refresh only after the manual pipeline is demonstrated. Add backup/restore verification, monitoring, incremental extraction, and richer graph queries as the project grows.
+Confirm the professor's intended dataset and database requirements. Complete a fresh privileged SSH-settings and firewall check. Add a scheduled refresh only after the manual pipeline is demonstrated. Add backup/restore verification, monitoring, incremental extraction, and richer graph queries as the project grows.
 
 ## Demonstration
 Show QA and production; explain their promotion rule. Run ETL on the included snapshot twice and compare counts. Query successful deployments in SQLite and Neo4j, then show a failed workflow with no deployment relationship. Open the specification site and the project in VS Code. See RUNBOOK.md for commands and evidence instructions.

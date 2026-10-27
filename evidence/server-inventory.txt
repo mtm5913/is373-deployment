@@ -1,0 +1,65 @@
+
+=== Collected at UTC ===
+Tue Oct 27 14:09:11 UTC 2026
+
+=== Identity and OS ===
+deploy
+Linux 6.8.0-142-generic x86_64
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.5 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+
+=== Resources ===
+               total        used        free      shared  buff/cache   available
+Mem:            1967        1204         217           7         745         763
+Swap:              0           0           0
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/vda1        48G  4.9G   43G  11% /
+
+=== Docker version and containers ===
+29.8.2
+is373-data-neo4j-1 | neo4j:5.26-community | 7473-7474/tcp, 7687/tcp
+is373-production-website-1 | ghcr.io/mtm5913/is373-deployment:29c13454a562b2be67ecbcf49511d06d89725ddc | 80/tcp
+is373-qa-website-1 | 4781e58efe3c | 80/tcp
+hosting373-site-5-1 | httpd:2.4-alpine | 80/tcp
+hosting373-site-2-1 | httpd:2.4-alpine | 80/tcp
+hosting373-site-1-1 | httpd:2.4-alpine | 80/tcp
+hosting373-site-3-1 | httpd:2.4-alpine | 80/tcp
+hosting373-site-4-1 | httpd:2.4-alpine | 80/tcp
+hosting373-traefik-1 | traefik:v3.7.13 | 0.0.0.0:80->80/tcp, [::]:80->80/tcp, 0.0.0.0:443->443/tcp, [::]:443->443/tcp
+
+=== Compose projects ===
+NAME                STATUS              CONFIG FILES
+hosting373          running(6)          /root/373_hosting/runtime/compose.yaml
+is373-data          running(1)          /home/deploy/is373-data-platform/compose.etl.yaml
+is373-production    running(1)          /home/deploy/releases/production/29c13454a562b2be67ecbcf49511d06d89725ddc-37825660231-1/compose.yaml
+is373-qa            running(1)          /home/deploy/releases/qa/09e8693374498c1326ddc25002659495e2a8a225-37822111536-1/compose.yaml
+
+=== Listening sockets ===
+Netid State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
+udp   UNCONN 0      0         127.0.0.54:53        0.0.0.0:*          
+udp   UNCONN 0      0      127.0.0.53%lo:53        0.0.0.0:*          
+tcp   LISTEN 0      4096         0.0.0.0:80        0.0.0.0:*          
+tcp   LISTEN 0      4096         0.0.0.0:22        0.0.0.0:*          
+tcp   LISTEN 0      4096         0.0.0.0:443       0.0.0.0:*          
+tcp   LISTEN 0      4096   127.0.0.53%lo:53        0.0.0.0:*          
+tcp   LISTEN 0      4096      127.0.0.54:53        0.0.0.0:*          
+tcp   LISTEN 0      4096            [::]:80           [::]:*          
+tcp   LISTEN 0      4096            [::]:22           [::]:*          
+tcp   LISTEN 0      4096            [::]:443          [::]:*          
+
+=== SSH effective settings (sudo may prompt) ===
+Effective privileged SSH check pending interactive sudo.
+
+=== Firewall ===
+Firewall check pending interactive sudo.

@@ -9,6 +9,6 @@ docker version --format '{{.Server.Version}}'
 docker ps --format '{{.Names}} | {{.Image}} | {{.Ports}}'
 printf '\n=== Compose projects ===\n'; docker compose ls
 printf '\n=== Listening sockets ===\n'; ss -lntu
-printf '\n=== SSH effective settings (sudo may prompt) ===\n'
+printf '\n=== SSH effective settings (noninteractive sudo) ===\n'
 sudo -n sshd -T 2>/dev/null | grep -E '^(permitrootlogin|passwordauthentication|pubkeyauthentication|kbdinteractiveauthentication) ' || printf 'Effective privileged SSH check pending interactive sudo.\n'
 printf '\n=== Firewall ===\n'; sudo -n ufw status 2>/dev/null || printf 'Firewall check pending interactive sudo.\n'

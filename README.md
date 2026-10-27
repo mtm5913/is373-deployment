@@ -3,6 +3,8 @@
 Production: https://megan373lab.xyz
 QA: https://qa.megan373lab.xyz
 
+Specification: https://mtm5913.github.io/is373-deployment/
+
 ## Deployment process
 
 Pushes to qa deploy QA. After checking QA, I merge those changes into main to deploy production. Each environment uses a separate Docker Compose project and container.
@@ -39,12 +41,12 @@ Effective SSH settings:
 
 ## Server specification and ETL extension
 
-Prepared October 27, 2026 from classroom notes; requirements are assumptions pending instructor clarification.
+Implemented October 27, 2026 from classroom notes; requirements are assumptions pending instructor clarification.
 
 - [High-level specification](docs/SPECIFICATION.md) and [operation/demo runbook](docs/RUNBOOK.md).
 - [Verification record](evidence/verification.md).
 - `etl/pipeline.py` extracts GitHub Actions history, normalizes it into canonical SQLite, and loads a Neo4j graph.
 - `compose.etl.yaml` isolates the data pipeline from existing QA and production websites.
-- `.github/workflows/spec-pages.yml` publishes the specification to GitHub Pages after Pages is enabled and the branch reaches main.
+- `.github/workflows/spec-pages.yml` publishes the specification to GitHub Pages on relevant main-branch changes. The public specification is live at the link above.
 
 Local demo: `python3 -m etl.pipeline --input data/raw/workflow-runs.json`. See the runbook for deployment and graph queries.
